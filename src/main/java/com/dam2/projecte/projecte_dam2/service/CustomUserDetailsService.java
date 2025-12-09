@@ -25,17 +25,19 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Spring Security usa el nombre de usuario para buscar. En este caso, usaremos el email.
         Usuario usuario = usuarioRepository.findBynombreUsuario(username);
 
         if (usuario == null) {
             throw new UsernameNotFoundException("Usuario o password inválidos.");
         }
 
-        // Se construye el objeto UserDetails con el email (como username), la contraseña y los roles.
         return new org.springframework.security.core.userdetails.User(
             usuario.getNombreUsuario(),
             usuario.getPassword(),
+            true, // enabled
+            true, // accountNonExpired
+            true, // credentialsNonExpired
+            !usuario.isBloqueado(), // accountNonLocked -> false cuando esté bloqueado
             mapRolesToAuthorities(usuario.getRoles())
         );
     }

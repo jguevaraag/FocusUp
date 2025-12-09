@@ -44,6 +44,12 @@ public class Usuario {
     )
     private Collection<Rol> roles;
 
+    @Column(name = "intentos_fallidos")
+    private int intentosFallidos;
+
+    @Column(name = "bloqueado")
+    private boolean bloqueado;
+
 
     public Usuario(long id, String nombre, String apellidos, String email, String nombreUsuario, String password, Collection<Rol> roles) {
         super();
@@ -54,6 +60,8 @@ public class Usuario {
         this.nombreUsuario = nombreUsuario;
         this.password = password;
         this.roles = roles;
+        this.intentosFallidos = 0;
+        this.bloqueado = false;
     }
 
 
@@ -65,6 +73,8 @@ public class Usuario {
         this.nombreUsuario = nombreUsuario;
         this.password = password;
         this.roles = roles;
+        this.intentosFallidos = 0;
+        this.bloqueado = false;
     }
 
 
@@ -77,6 +87,21 @@ public class Usuario {
         return id;
     }
 
+    public int getIntentosFallidos() {
+        return intentosFallidos;
+    }
+
+    public boolean isBloqueado() {
+        return bloqueado;
+    }
+
+    public void setBloqueado(boolean bloqueado) {
+        this.bloqueado = bloqueado;
+    }
+
+    public void setIntentosFallidos(int intentosFallidos) {
+        this.intentosFallidos = intentosFallidos;
+    }
 
     public String getNombre() {
         return nombre;

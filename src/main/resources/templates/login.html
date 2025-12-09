@@ -28,11 +28,16 @@
                 <div class="alert alert-danger">Usuario o contraseña inválidos</div>
             </div>
 
+            <div th:if="${param.bloqueado}">
+                <div class="alert alert-danger">Tu cuenta está bloqueada. Contacta con el administrador.</div>
+            </div>
+
             <div th:if="${param.logout}">
                 <div class="alert alert-info">Has cerrado sesión</div>
             </div>
 
             <form th:action="@{/login}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <div class="form-group">
                     <label class="control-label" for="nombreUsuario">Nombre de usuario :</label>
                     <input id="nombreUsuario" type="text" class="form-control" name="username" required autofocus="autofocus">

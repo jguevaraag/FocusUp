@@ -5,26 +5,36 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler; // Importación añadida
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguraton {
 
+    // 1. Inyección de dependencias de los manejadores
+    private final AuthenticationSuccessHandler successHandler;
+    private final AuthenticationFailureHandler failureHandler;
+
+    public SecurityConfiguraton(AuthenticationSuccessHandler successHandler, AuthenticationFailureHandler failureHandler) {
+        this.successHandler = successHandler;
+        this.failureHandler = failureHandler;
+    }
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http ) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
-                // Permitir acceso a la página de registro y recursos estáticos
-                .requestMatchers("/registro", "/registro/**", "/js/**", "/css/**", "/img/**", "/webjars/**").permitAll()
-                // Permitir acceso a /login
+                .requestMatchers("/registro", "/registro/**", "/js/**", "/css/**", "/img/**", "/webjars/**" ).permitAll()
                 .requestMatchers("/login", "/login/**").permitAll()
-                // Proteger otras rutas (requiere autenticación)
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/login")
                 .permitAll()
-                .defaultSuccessUrl("/")
+                // 2. Configuración explícita de los manejadores
+                .successHandler(successHandler)
+                .failureHandler(failureHandler)
             )
             .logout(logout -> logout
                 .invalidateHttpSession(true)
@@ -33,7 +43,7 @@ public class SecurityConfiguraton {
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
             );
-        return http.build();
+        return http.build( );
     }
 }
 
