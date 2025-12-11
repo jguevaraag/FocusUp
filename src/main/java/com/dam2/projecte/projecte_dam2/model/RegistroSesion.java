@@ -1,7 +1,8 @@
 package com.dam2.projecte.projecte_dam2.model;
 
 import java.time.LocalDateTime;
-
+import lombok.Data;
+import lombok.AllArgsConstructor;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +14,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "registro_sesiones")
+@Data
+@AllArgsConstructor
 public class RegistroSesion {
 
         @Id
@@ -32,46 +35,4 @@ public class RegistroSesion {
         public RegistroSesion() {
             this.fechaHora = LocalDateTime.now();
         }
-
-        public RegistroSesion(Usuario usuario, String ipAddress) {
-            this.usuario = usuario;
-            this.ipAddress = ipAddress;
-            this.fechaHora = LocalDateTime.now();
-        }
-
-        
-
-        public Long getId() {
-            return id;
-        }
-
-        public Usuario getUsuario() {
-            return usuario;
-        }
-
-        public LocalDateTime getFechaHora() {
-            return fechaHora;
-        }
-
-        public String getIpAddress() {
-            return ipAddress;
-        }
-
-        public void setId(Long id) {
-            this.id = id;
-        }
-
-        public void setUsuario(Usuario usuario) {
-            this.usuario = usuario;
-        }
-
-        public void setFechaHora(LocalDateTime fechaHora) {
-            this.fechaHora = fechaHora;
-        }
-
-        public void setIpAddress(String ipAddress) {
-            this.ipAddress = ipAddress;
-        }
-
-        
 }

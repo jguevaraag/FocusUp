@@ -13,9 +13,15 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "usuarios", uniqueConstraints = @UniqueConstraint(columnNames = {"email", "nombre_usuario"})) // Añadido uniqueConstraint para nombre_usuario
+@Table(name = "usuarios", uniqueConstraints = @UniqueConstraint(columnNames = { "email", "nombre_usuario" }))
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Usuario {
 
     @Id
@@ -27,21 +33,17 @@ public class Usuario {
 
     @Column(name = "apellidos")
     private String apellidos;
-    
+
     @Column(name = "email")
     private String email;
-    
+
     @Column(name = "nombre_usuario", unique = true)
     private String nombreUsuario; // Nuevo campo
-    
+
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinTable(
-        name = "usuarios_roles",
-        joinColumns = @jakarta.persistence.JoinColumn(name = "usuario_id", referencedColumnName = "id"),
-        inverseJoinColumns = @jakarta.persistence.JoinColumn(name = "rol_id", referencedColumnName = "id")
-    )
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "usuarios_roles", joinColumns = @jakarta.persistence.JoinColumn(name = "usuario_id", referencedColumnName = "id"), inverseJoinColumns = @jakarta.persistence.JoinColumn(name = "rol_id", referencedColumnName = "id"))
     private Collection<Rol> roles;
 
     @Column(name = "intentos_fallidos")
@@ -50,8 +52,8 @@ public class Usuario {
     @Column(name = "bloqueado")
     private boolean bloqueado;
 
-
-    public Usuario(long id, String nombre, String apellidos, String email, String nombreUsuario, String password, Collection<Rol> roles) {
+    public Usuario(long id, String nombre, String apellidos, String email, String nombreUsuario, String password,
+            Collection<Rol> roles) {
         super();
         this.id = id;
         this.nombre = nombre;
@@ -64,8 +66,8 @@ public class Usuario {
         this.bloqueado = false;
     }
 
-
-    public Usuario(String nombre, String apellidos, String email, String nombreUsuario, String password, Collection<Rol> roles) {
+    public Usuario(String nombre, String apellidos, String email, String nombreUsuario, String password,
+            Collection<Rol> roles) {
         super();
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -76,93 +78,4 @@ public class Usuario {
         this.intentosFallidos = 0;
         this.bloqueado = false;
     }
-
-
-    public Usuario() {
-        super();
-    }
-
-
-    public long getId() {
-        return id;
-    }
-
-    public int getIntentosFallidos() {
-        return intentosFallidos;
-    }
-
-    public boolean isBloqueado() {
-        return bloqueado;
-    }
-
-    public void setBloqueado(boolean bloqueado) {
-        this.bloqueado = bloqueado;
-    }
-
-    public void setIntentosFallidos(int intentosFallidos) {
-        this.intentosFallidos = intentosFallidos;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-
-    public String getEmail() {
-        return email;
-    }
-    
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-
-
-    public String getPassword() {
-        return password;
-    }
-
-
-    public Collection<Rol> getRoles() {
-        return roles;
-    }
-
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
-
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-    public void setRoles(Collection<Rol> roles) {
-        this.roles = roles;
-    }
-
 }
