@@ -2,7 +2,7 @@ package com.dam2.projecte.projecte_dam2.service;
 
 import java.util.Arrays;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.dam2.projecte.projecte_dam2.dto.UsuarioRegistroDTO;
@@ -14,10 +14,10 @@ import com.dam2.projecte.projecte_dam2.repository.UsuarioRepository;
 public class UsuarioServiceImpl implements UsuarioService {
 
     private UsuarioRepository usuarioRepository;
-    private BCryptPasswordEncoder passwordEncoder; // Añadido para codificar la contraseña
+    private PasswordEncoder passwordEncoder; // Añadido para codificar la contraseña
 
-    // Constructor actualizado para inyectar BCryptPasswordEncoder
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, BCryptPasswordEncoder passwordEncoder) {
+    // Constructor actualizado para inyectar PasswordEncoder
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         super();
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;

@@ -2,7 +2,6 @@ package com.dam2.projecte.projecte_dam2.model;
 
 import java.util.Collection;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -42,7 +41,7 @@ public class Usuario {
 
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "usuarios_roles", joinColumns = @jakarta.persistence.JoinColumn(name = "usuario_id", referencedColumnName = "id"), inverseJoinColumns = @jakarta.persistence.JoinColumn(name = "rol_id", referencedColumnName = "id"))
     private Collection<Rol> roles;
 

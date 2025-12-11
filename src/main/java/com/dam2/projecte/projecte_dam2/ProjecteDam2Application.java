@@ -2,16 +2,11 @@ package com.dam2.projecte.projecte_dam2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 public class ProjecteDam2Application {
 
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+	// PasswordEncoder bean provided in SecurityConfiguraton
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProjecteDam2Application.class, args);

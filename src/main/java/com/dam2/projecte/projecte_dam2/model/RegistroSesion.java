@@ -35,4 +35,8 @@ public class RegistroSesion {
         public RegistroSesion() {
             this.fechaHora = LocalDateTime.now();
         }
+        public RegistroSesion(Usuario usuario, String ipAddress) {
+            this.usuario = usuario;
+            this.ipAddress = ipAddress;
+        }
 }
