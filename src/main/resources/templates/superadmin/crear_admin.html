@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Crear Administrador</title>
+    <!-- CDN de Bootstrap 5.3.8 con hash de integridad actualizado, -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" 
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
+          crossorigin="anonymous">
+</head>
+<body class="bg-light">
+
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+          
+          <div class="card shadow-lg">
+            <div class="card-header bg-success text-white text-center">
+              <h4 class="mb-0">Crear Nuevo Administrador</h4>
+            </div>
+            
+            <div class="card-body p-4">
+            
+              <!-- El formulario utiliza el DTO de registro, UsuarioRegistroDTO, y se envía a una nueva URL del controlador, -->
+              <form th:action="@{/superadmin/crear_admin}" th:object="${usuario}" method="POST">
+              
+                <div class="mb-3">
+                  <label for="nombreUsuario" class="form-label">Nombre de Usuario (Login)</label>
+                  <input type="text" th:field="*{nombreUsuario}" class="form-control" required>
+                  <p th:if="${#fields.hasErrors('nombreUsuario')}" th:errors="*{nombreUsuario}" class="text-danger"></p>
+                </div>
+
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" th:field="*{email}" class="form-control" required>
+                  <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></p>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">Contraseña Temporal</label>
+                  <!-- El campo debe cumplir con las validaciones de seguridad definidas en el DTO, [1] -->
+                  <input type="password" th:field="*{password}" class="form-control" required>
+                  <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></p>
+                </div>
+                
+                <!-- Campos restantes para asegurar el DTO -->
+                <input type="hidden" th:field="*{nombre}" value="Administrador"/>
+                <input type="hidden" th:field="*{apellidos}" value="Genérico"/>
+                
+                <div class="d-grid mt-4">
+                  <button type="submit" class="btn btn-success btn-lg">
+                    Crear Admin
+                  </button>
+                </div>
+                
+              </form>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript de Bootstrap (bundle), [2] -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+            crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 package com.dam2.projecte.projecte_dam2.config;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -8,10 +9,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler; // Importación añadida
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguraton {
-    
+
     private final AuthenticationSuccessHandler successHandler;
     private final AuthenticationFailureHandler failureHandler;
 
@@ -25,19 +27,20 @@ public class SecurityConfiguraton {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                // Rutas públicas
-                .requestMatchers("/registro", "/registro/**", "/js/**", "/css/**", "/img/**", "/webjars/**" ).permitAll()
-                .requestMatchers("/login", "/login/**").permitAll()
-                
-                // Nuevas rutas protegidas por rol:
-                // Solo SuperAdmin puede acceder a su índice
-                .requestMatchers("/index_super", "/index_super/**").hasRole("SUPERADMIN") 
-                // Admin (y SuperAdmin, si tiene ese rol)
-                .requestMatchers("/index_admin", "/index_admin/**").hasAnyRole("SUPERADMIN", "ADMIN")
-                
-                // Cualquier otra solicitud requiere autenticación
-                .anyRequest().authenticated()
-            )
+                        // Rutas públicas
+                        .requestMatchers("/registro", "/registro/**", "/js/**", "/css/**", "/img/**", "/webjars/**")
+                        .permitAll()
+                        .requestMatchers("/login", "/login/**").permitAll()
+
+                        // Nuevas rutas protegidas por rol:
+                        // Solo SuperAdmin puede acceder a su índice
+                        .requestMatchers("/superadmin/crear_admin", "/superadmin/crear_admin/**").hasRole("SUPERADMIN")
+                        .requestMatchers("/superadmin/modificar_usuario", "/superadmin/modificar_usuario/**")
+                        .hasRole("SUPERADMIN")
+                        // Admin (y SuperAdmin, si tiene ese rol)
+                        .requestMatchers("/admin/usuarios", "/admin/usuarios/**").hasAnyRole("SUPERADMIN", "ADMIN")
+                        // Cualquier otra solicitud requiere autenticación
+                        .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
