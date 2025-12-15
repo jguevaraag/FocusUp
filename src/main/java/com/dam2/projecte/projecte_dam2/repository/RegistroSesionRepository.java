@@ -8,4 +8,5 @@ import com.dam2.projecte.projecte_dam2.model.RegistroSesion;
 @Repository
 public interface RegistroSesionRepository extends JpaRepository<RegistroSesion, Long> {
 
+    void deleteByUsuarioId(Long usuarioId);
 }

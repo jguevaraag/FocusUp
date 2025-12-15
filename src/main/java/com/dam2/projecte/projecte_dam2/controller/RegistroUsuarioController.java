@@ -41,7 +41,28 @@ public class RegistroUsuarioController {
         if (result.hasErrors()) {
             return "registro";
         }
-        usuarioService.saveUser(rUsuarioRegistroDTO);
+
+        try {
+            usuarioService.saveUser(rUsuarioRegistroDTO);
+        } catch (RuntimeException e) {
+            // Capturamos la excepción lanzada desde el servicio (un error en tiempo de ejecución)
+            
+            if ("nombreUsuarioDuplicado".equals(e.getMessage())) {
+                // Adjuntamos el error al campo 'nombreUsuario'
+                result.rejectValue("nombreUsuario", "error.usuario", "El nombre de usuario ya está registrado.");
+            } else if ("emailDuplicado".equals(e.getMessage())) {
+                // Adjuntamos el error al campo 'email'
+                result.rejectValue("email", "error.email", "El correo electrónico ya está registrado.");
+            } else {
+                // Error inesperado
+                result.reject("global.error", "Ha ocurrido un error inesperado durante el registro.");
+            }
+            
+            // Si capturamos cualquier error, volvemos a mostrar el formulario de registro
+            if (result.hasErrors()) {
+                return "registro";
+            }
+        }
         return "redirect:/registro?exito";
     }
 }
