@@ -1,6 +1,7 @@
 package com.dam2.projecte.projecte_dam2.service;
 
 import com.dam2.projecte.projecte_dam2.dto.UsuarioRegistroDTO;
+import com.dam2.projecte.projecte_dam2.dto.UsuarioUpdateDTO;
 import com.dam2.projecte.projecte_dam2.model.Usuario;
 
 public interface UsuarioService {
@@ -11,5 +12,7 @@ public interface UsuarioService {
     Usuario findByNombreUsuario(String nombreUsuario);
 
     // Para actualizar el perfil
-    Usuario updateUser(UsuarioRegistroDTO updateDTO);
+     Usuario updateUser(UsuarioUpdateDTO updateDTO);
+
+     public Usuario createAdmin(UsuarioRegistroDTO registroDTO);
 }

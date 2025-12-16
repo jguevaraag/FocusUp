@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.dam2.projecte.projecte_dam2.dto.UsuarioRegistroDTO;
+import com.dam2.projecte.projecte_dam2.dto.UsuarioUpdateDTO;
 import com.dam2.projecte.projecte_dam2.model.Rol;
 import com.dam2.projecte.projecte_dam2.model.Usuario;
 import com.dam2.projecte.projecte_dam2.repository.UsuarioRepository;
@@ -80,30 +81,26 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Transactional
     @Override
-    public Usuario updateUser(UsuarioRegistroDTO updateDTO) {
-        // 1. Buscamos el usuario existente por su ID (que viene en el DTO/Contexto de
-        // seguridad)
+    public Usuario updateUser(UsuarioUpdateDTO updateDTO) { // Cambio de DTO
         Optional<Usuario> optionalUser = usuarioRepository.findById(updateDTO.getId());
 
         if (optionalUser.isEmpty()) {
-            // (Manejo de error)
+            throw new RuntimeException("Usuario con ID " + updateDTO.getId() + " no encontrado.");
         }
 
         Usuario existingUser = optionalUser.get();
 
-        // 2. Actualizar SOLAMENTE los campos permitidos
+        // Actualizar solo los campos permitidos:
         existingUser.setNombre(updateDTO.getNombre());
         existingUser.setApellidos(updateDTO.getApellidos());
         existingUser.setEmail(updateDTO.getEmail());
 
-        // 3. Lógica para la contraseña: Solo se codifica y se actualiza si se recibe
-        // una nueva
+        // La lógica clave: si el campo está vacío, no se llama al encoder y se conserva
+        // la contraseña existente.
         if (updateDTO.getPassword() != null && !updateDTO.getPassword().isBlank()) {
             existingUser.setPassword(passwordEncoder.encode(updateDTO.getPassword()));
         }
 
-        // 4. Guardar los cambios. El objeto existingUser ya contiene el ID
-        // y la contraseña ENCRIPTADA original, si no fue modificada en el paso 3.
         return usuarioRepository.save(existingUser);
     }
 
@@ -112,5 +109,31 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioRepository.findBynombreUsuario(nombreUsuario);
     }
 
-   
+    @Override
+    @Transactional // Asegura que la operación sea atómica
+    public Usuario createAdmin(UsuarioRegistroDTO registroDTO) {
+        // 1. Buscar el rol de administrador
+        Rol adminRole = rolRepository.findByNombre("ROLE_ADMIN");
+
+        // Opcional: Si el rol no existe, buscar el rol user como fallback o lanzar
+        // excepción
+        if (adminRole == null) {
+            // Manejar si ROLE_ADMIN no se encuentra (puede ser creado en Initializer)
+            throw new RuntimeException("El rol ROLE_ADMIN no existe en la base de datos.");
+        }
+
+        // 2. Codificar la contraseña y crear la entidad con el rol ADMIN
+        Usuario admin = new Usuario(
+                registroDTO.getNombre(),
+                registroDTO.getApellidos(),
+                registroDTO.getEmail(),
+                registroDTO.getNombreUsuario(),
+                passwordEncoder.encode(registroDTO.getPassword()),
+                Arrays.asList(adminRole) // Asignar el rol de administrador
+        );
+
+        // 3. Guardar en la base de datos
+        return usuarioRepository.save(admin);
+    }
+
 }

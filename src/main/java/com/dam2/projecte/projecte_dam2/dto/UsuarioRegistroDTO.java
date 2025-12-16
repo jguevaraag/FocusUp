@@ -13,17 +13,17 @@ public class UsuarioRegistroDTO {
 
     private long id;
 
-    @NotBlank(message = "El nombre no puede estar vacío")
+    
     private String nombre;
 
-    @NotBlank(message = "Los apellidos no pueden estar vacíos")
+    
     private String apellidos;
 
-    @NotBlank(message = "El email no puede estar vacío")
+    
     @Email(message = "Introduce un correo electrónico válido")
     private String email;
 
-    @NotBlank(message = "El nombre de usuario no puede estar vacío")
+    
     private String nombreUsuario;
 
     @NotBlank(message = "La contraseña no puede estar vacía")
