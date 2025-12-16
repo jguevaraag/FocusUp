@@ -1,0 +1,82 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modificar</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <style>
+        /* Ajustes estéticos */
+        body { background: linear-gradient(135deg,#f5f7fa,#c3cfe2); min-height:100vh; padding-top: 70px; }
+        .card-register { max-width: 720px; margin: 40px auto; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+        .form-control:focus { box-shadow:none; border-color:#6c63ff; }
+        /* Esta clase ahora se usa para mostrar los requisitos de la contraseña */
+        .password-note { font-size: .85rem; color: #6b7280; margin-top: 5px; display: block; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" th:href="@{/}">Registro y Login</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h2>Modificar Perfil</h2>
+
+    <!-- Formulario que usa el DTO y envía por POST -->
+    <form th:action="@{/modificar}" method="post" th:object="${usuario}">
+        
+        <!-- Campo oculto para el ID: CRUCIAL para el UPDATE de JPA -->
+        <input type="hidden" th:field="*{id}" />
+
+        <!-- Campos de Datos (similares a registro.html [3]) -->
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <!-- th:field se encarga de precargar el valor -->
+            <input type="text" id="nombre" name="nombre" th:field="*{nombre}" class="form-control" />
+            <!-- Mostrar errores de validación si existen -->
+            <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" id="apellidos" name="apellidos" th:field="*{apellidos}" class="form-control" />
+            <span th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" th:field="*{email}" class="form-control" />
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+        </div>
+
+        <!-- Campo de Contraseña: Se solicita la nueva contraseña, pero si se deja vacío, no se actualiza (lógica en el servicio) -->
+        <div class="form-group">
+            <label for="password">Nueva Contraseña (dejar vacío para no cambiar):</label>
+            <input type="password" id="password" name="password" th:field="*{password}" class="form-control" />
+            <!-- La validación de @Size se aplicará si se introduce algo. -->
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+        <a th:href="@{/index_user}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfH/6QZ6b6b9Yl5nYl0hE6qfC5i3GQ5K5t9UJ0Z" crossorigin="anonymous"></script>
+
+</body>
+</html>

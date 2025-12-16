@@ -1,6 +1,7 @@
 package com.dam2.projecte.projecte_dam2.service;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -76,4 +77,40 @@ public class UsuarioServiceImpl implements UsuarioService {
         // Opcional: Manejar excepción si no se encuentra, aunque en el contexto de un
         // usuario autenticado, siempre debería existir.
     }
+
+    @Transactional
+    @Override
+    public Usuario updateUser(UsuarioRegistroDTO updateDTO) {
+        // 1. Buscamos el usuario existente por su ID (que viene en el DTO/Contexto de
+        // seguridad)
+        Optional<Usuario> optionalUser = usuarioRepository.findById(updateDTO.getId());
+
+        if (optionalUser.isEmpty()) {
+            // (Manejo de error)
+        }
+
+        Usuario existingUser = optionalUser.get();
+
+        // 2. Actualizar SOLAMENTE los campos permitidos
+        existingUser.setNombre(updateDTO.getNombre());
+        existingUser.setApellidos(updateDTO.getApellidos());
+        existingUser.setEmail(updateDTO.getEmail());
+
+        // 3. Lógica para la contraseña: Solo se codifica y se actualiza si se recibe
+        // una nueva
+        if (updateDTO.getPassword() != null && !updateDTO.getPassword().isBlank()) {
+            existingUser.setPassword(passwordEncoder.encode(updateDTO.getPassword()));
+        }
+
+        // 4. Guardar los cambios. El objeto existingUser ya contiene el ID
+        // y la contraseña ENCRIPTADA original, si no fue modificada en el paso 3.
+        return usuarioRepository.save(existingUser);
+    }
+
+    @Override
+    public Usuario findByNombreUsuario(String nombreUsuario) {
+        return usuarioRepository.findBynombreUsuario(nombreUsuario);
+    }
+
+   
 }

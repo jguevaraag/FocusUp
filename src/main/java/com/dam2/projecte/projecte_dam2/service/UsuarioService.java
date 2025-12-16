@@ -7,4 +7,9 @@ public interface UsuarioService {
 
     public Usuario saveUser(UsuarioRegistroDTO registroDTO);
     void eliminarUsuario(String nombreUsuario);
+    // Para cargar la información del perfil
+    Usuario findByNombreUsuario(String nombreUsuario);
+
+    // Para actualizar el perfil
+    Usuario updateUser(UsuarioRegistroDTO updateDTO);
 }

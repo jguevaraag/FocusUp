@@ -90,6 +90,10 @@
 
     <h3 class="mt-5">Gestión de Cuenta</h3>
 
+    <a th:href="@{/modificar}" class="btn btn-primary">
+            Modificar Mi Perfil
+        </a>
+
     <!-- Formulario para la eliminación del usuario actual -->
     <form th:action="@{/perfil/eliminar}" method="post" 
           onsubmit="return confirm('ADVERTENCIA: ¿Estás seguro de que deseas eliminar tu cuenta permanentemente?');">
